@@ -181,6 +181,8 @@
     var data = {};
     collect().forEach(function (r) { data[r.key] = r.value; });
     data['Einwilligung Datenschutz'] = document.getElementById('consent').checked ? 'Ja' : 'Nein';
+    var nl = document.getElementById('newsletterOptIn');
+    data['Newsletter gewünscht'] = nl && nl.checked ? 'Ja' : 'Nein';
     data['Gesendet am'] = new Date().toLocaleString('de-DE');
     data['Seite'] = location.href;
     return data;
@@ -202,9 +204,23 @@
     nextBtn.querySelector('span').textContent = 'Wird gesendet …';
 
     function done() {
+      maybeSubscribeNewsletter();
       try { localStorage.removeItem(cfg.storageKey || 'leonie-fragebogen'); } catch (e) {}
       nextBtn.classList.remove('sending');
       show(LAST);
+    }
+
+    /* Newsletter-Häkchen: Anmeldung separat anstoßen (Double-Opt-in macht der Endpoint) */
+    function maybeSubscribeNewsletter() {
+      var box = document.getElementById('newsletterOptIn');
+      if (!box || !box.checked || !cfg.newsletterEndpoint) return;
+      var email = data['E-Mail'] || '';
+      if (!email) return;
+      fetch(cfg.newsletterEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'subscribe', 'E-Mail': email })
+      }).catch(function () { /* Anfrage ist wichtiger; Newsletter-Fehler still schlucken */ });
     }
 
     if (!cfg.endpoint) {

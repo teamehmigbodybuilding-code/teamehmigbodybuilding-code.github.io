@@ -67,10 +67,12 @@ function doGet(e) {
   var token = e && e.parameter ? e.parameter.token : '';
 
   if (action === 'confirm' && token) {
-    if (setStatusByToken(token, 'bestätigt', 4)) {
+    var bestaetigt = setStatusByToken(token, 'bestätigt', 4);
+    if (bestaetigt) {
+      sendWelcomeMail(bestaetigt, token);
       return htmlPage('Angemeldet!',
-        'Deine Anmeldung ist bestätigt. Ab jetzt bekommst du einmal pro Woche Post von mir. ' +
-        'Abmelden kannst du dich jederzeit mit einem Klick in jeder Mail.');
+        'Deine Anmeldung ist bestätigt. Schau gleich nochmal in dein Postfach, da wartet meine Willkommens-Mail. ' +
+        'Ab jetzt bekommst du einmal pro Woche Post von mir; abmelden geht jederzeit mit einem Klick.');
     }
     return htmlPage('Link ungültig', 'Dieser Bestätigungs-Link ist nicht (mehr) gültig. Trag dich einfach neu ein.');
   }
@@ -193,6 +195,28 @@ function sendConfirmMail(email, token) {
   });
 }
 
+function sendWelcomeMail(email, token) {
+  var magnet = String(mailTab().getRange('B5').getValue() || '').trim();
+  var unsub = ScriptApp.getService().getUrl() + '?action=unsubscribe&token=' + token;
+  MailApp.sendEmail({
+    to: email,
+    subject: magnet ? 'Willkommen! Hier ist dein Geschenk' : 'Willkommen!',
+    htmlBody:
+      '<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#141312;max-width:560px">' +
+      '<p>Hey!</p>' +
+      '<p>Schön, dass du dabei bist. Ab jetzt bekommst du jeden Montag einen kurzen, ehrlichen ' +
+      'Trainings- oder Ernährungs-Impuls von mir. Kein Spam, versprochen.</p>' +
+      (magnet
+        ? '<p>Und wie versprochen dein Geschenk:</p>' +
+          '<p><a href="' + magnet + '" style="display:inline-block;padding:12px 22px;background:#141312;color:#ffffff;text-decoration:none;font-weight:bold">Jetzt kostenlos herunterladen →</a></p>'
+        : '') +
+      '<p>Wenn du nicht auf Montag warten willst: Auf <a href="' + WEBSITE + '">meiner Seite</a> findest du alles über mein 1:1-Coaching, inklusive Fragebogen.</p>' +
+      mailFooter(unsub) +
+      '</div>',
+    name: ABSENDER_NAME
+  });
+}
+
 function mailBody(intro, token) {
   var unsub = ScriptApp.getService().getUrl() + '?action=unsubscribe&token=' + token;
   return (
@@ -251,7 +275,8 @@ function mailTab() {
       'in denen du trotzdem trainierst. Wenn du dabei Unterstützung willst, findest du unten alle Wege, ' +
       'wie wir zusammenarbeiten können.');
     sh.getRange('A3').setValue('PAUSE hier eintragen = kein Versand');
-    sh.getRange('A1:A4').setFontWeight('bold');
+    sh.getRange('A5').setValue('Lead-Magnet-URL (optional: Download-Link fürs Geschenk in der Willkommens-Mail)');
+    sh.getRange('A1:A5').setFontWeight('bold');
     sh.setColumnWidth(2, 600);
   }
   return sh;
@@ -273,10 +298,10 @@ function setStatusByToken(token, status, dateCol) {
     if (rows[i][2] === token) {
       sh.getRange(i + 1, 2).setValue(status);
       sh.getRange(i + 1, dateCol + 1).setValue(new Date());
-      return true;
+      return String(rows[i][0]); // E-Mail zurückgeben (truthy)
     }
   }
-  return false;
+  return null;
 }
 
 function htmlPage(titel, text) {
