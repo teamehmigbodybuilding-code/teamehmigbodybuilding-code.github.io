@@ -16,15 +16,18 @@
  *  5. Wochenversand aktivieren: links das Uhr-Symbol (Trigger) → "Trigger hinzufügen" →
  *       Funktion: weeklySend · Bereitstellung: Head · Ereignisquelle: Zeitgesteuert ·
  *       Typ: Wochen-Timer · z. B. jeden Montag 8–9 Uhr → Speichern.
- *  6. Mail-Text ändern: Im Sheet gibt es (nach dem ersten Lauf) den Tab "Wochenmail".
- *     Dort stehen Betreff (B1) und Intro-Text (B2) — beides frei änderbar.
- *     Steht in B3 das Wort PAUSE, wird in der Woche nichts verschickt.
+ *  6. Themen: Der Tab "Themen" (entsteht beim ersten Lauf, mit 12 fertigen Wochen-Impulsen
+ *     vorbefüllt) ist die Warteschlange. Jede Woche wird automatisch die oberste Zeile
+ *     ohne "Verschickt am"-Datum verschickt. Neue Themen = einfach neue Zeilen anhängen.
+ *     Ist die Warteschlange leer, greift der Standardtext im Tab "Wochenmail" (B1/B2).
+ *     Steht in "Wochenmail" B3 das Wort PAUSE, wird in der Woche nichts verschickt.
  */
 
 var ABSENDER_NAME = 'Leonie — Online-Coaching';
 var WEBSITE = 'https://teamehmigbodybuilding-code.github.io';
 var TAB_ABOS = 'Abonnentinnen';
 var TAB_MAIL = 'Wochenmail';
+var TAB_THEMEN = 'Themen';
 
 /* ── Anmeldung von der Website ───────────────────────────────────── */
 
@@ -88,6 +91,11 @@ function weeklySend() {
   var mail = mailConfig();
   if (String(mail.pause).toUpperCase().indexOf('PAUSE') !== -1) return;
 
+  // Nächstes unverbrauchtes Thema aus dem "Themen"-Tab, sonst Standardtext
+  var thema = nextThema();
+  var betreff = thema ? thema.betreff : mail.betreff;
+  var intro = thema ? thema.text : mail.intro;
+
   var sh = abosSheet();
   var rows = sh.getDataRange().getValues();
   var gesendet = 0;
@@ -98,17 +106,73 @@ function weeklySend() {
     var token = rows[i][2];
     MailApp.sendEmail({
       to: email,
-      subject: mail.betreff,
-      htmlBody: mailBody(mail.intro, token),
+      subject: betreff,
+      htmlBody: mailBody(intro, token),
       name: ABSENDER_NAME
     });
     gesendet++;
   }
 
   if (gesendet > 0) {
+    if (thema) themenTab().getRange(thema.row, 3).setValue(new Date());
     var log = mailTab();
-    log.getRange('B4').setValue('Zuletzt verschickt: ' + new Date() + ' an ' + gesendet + ' Adressen');
+    log.getRange('B4').setValue('Zuletzt verschickt: ' + new Date() + ' an ' + gesendet + ' Adressen' +
+      (thema ? ' · Thema: ' + thema.betreff : ' · Standardtext (Themen-Vorrat leer!)'));
   }
+}
+
+/* ── Themen-Warteschlange ────────────────────────────────────────── */
+
+function nextThema() {
+  var sh = themenTab();
+  var rows = sh.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) {
+    if (rows[i][0] && !rows[i][2]) {
+      return { betreff: String(rows[i][0]), text: String(rows[i][1]), row: i + 1 };
+    }
+  }
+  return null;
+}
+
+function themenTab() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName(TAB_THEMEN);
+  if (!sh) {
+    sh = ss.insertSheet(TAB_THEMEN);
+    sh.appendRow(['Betreff', 'Text', 'Verschickt am']);
+    sh.getRange(1, 1, 1, 3).setFontWeight('bold').setBackground('#000000').setFontColor('#ffffff');
+    sh.setFrozenRows(1);
+    sh.setColumnWidth(1, 320);
+    sh.setColumnWidth(2, 700);
+    var seeds = [
+      ['Du trainierst hart und trotzdem passiert nichts?',
+       'dann fehlt dir mit hoher Wahrscheinlichkeit kein Fleiß, sondern Struktur. Fortschritt entsteht, wenn Training, Essen und Erholung zusammenpassen und du von Woche zu Woche ein bisschen mehr leistest als davor. Genau das steht in keinem fertigen Plan aus dem Internet, weil es von deinem Alltag abhängt. Frag dich diese Woche ehrlich: Weißt du, was du letzte Woche im Training geschafft hast? Wenn nein, fang an, es aufzuschreiben.'],
+      ['Warum ein kleines Defizit dich weiter bringt',
+       'große Kalorienschnitte fühlen sich nach Fortschritt an, aber sie haben einen Preis: Deine Regeneration leidet, dein Training wird schlechter und du hältst es nicht durch. Ein moderates Defizit, das du über Monate fahren kannst, schlägt jedes aggressive, das nach drei Wochen kippt. Abnehmen ist ein Marathon mit Etappen, kein Sprint.'],
+      ['Schlaf ist dein unterschätztestes Werkzeug',
+       'viele optimieren Supplemente und ignorieren die Basics: Der Schlaf wird geopfert, weil die Serie spannender ist, und dann wundert man sich über fehlenden Fortschritt. Muskeln wachsen in der Erholung, nicht im Training. Wenn du diese Woche nur eine Sache änderst, dann die: eine feste Zeit, zu der das Handy weggelegt wird.'],
+      ['Nach der Diät ist vor der Form',
+       'das Ziel nach einer Diät ist nicht, so schnell wie möglich alles nachzuholen. Iss auf deinen Erhaltungskalorien, überwiegend aus richtigen Lebensmitteln, und gönn dir bewusst den einen oder anderen Genussmoment. So hältst du dein Ergebnis, statt es in vier Wochen wieder herzugeben. Wer clever isst, muss weder hungern noch stopfen.'],
+      ['Refeeds: Pause mit Plan statt Cheat-Chaos',
+       'ein Refeed ist keine Belohnung und kein Kontrollverlust, sondern ein geplanter Tag mit mehr Kohlenhydraten, der Kopf und Training entlastet. Der Unterschied zum Cheat Day: Du entscheidest vorher, was und wie viel. Wenn deine Diät nur noch mit Willenskraft läuft, ist das ein Signal, die Pause zu planen, bevor sie sich selbst nimmt.'],
+      ['Cardio ist ein Werkzeug, keine Strafe',
+       'Cardio ist nicht dazu da, Essen "abzuarbeiten". Es ist ein Regler für deinen Kalorienverbrauch, den man gezielt und dosiert einsetzt, damit das Krafttraining die Hauptrolle behalten kann. Wer jede Diät mit stundenlangem Cardio beginnt, hat später keinen Spielraum mehr, wenn der Fortschritt stockt. Klein anfangen, Luft nach oben lassen.'],
+      ['Ohne Daten rate ich nur',
+       'Gewicht, Fotos, Kraftwerte: Das sind keine Zahlen für Perfektionistinnen, das ist die Grundlage für jede gute Entscheidung. Ein einzelner Tag sagt fast nichts, der Verlauf über Wochen sagt fast alles. Du musst nicht ewig tracken. Aber in Phasen, in denen du etwas verändern willst, ist Messen der Unterschied zwischen Anpassen und Raten.'],
+      ['Weniger Sätze, näher ans Limit',
+       'zwanzig halbherzige Sätze machen dich müde, aber nicht stärker. Wenige, saubere Arbeitssätze nah am Muskelversagen setzen den Reiz, für den dein Körper Muskeln aufbaut. Wenn du nach deinem Training noch problemlos zwei weitere Stunden trainieren könntest, war es wahrscheinlich zu viel Beschäftigung und zu wenig Reiz.'],
+      ['Die Waage lügt (kurzfristig)',
+       'Wassereinlagerungen durch Zyklus, Salz, Stress oder ein hartes Training können das Tagesgewicht deutlich verschieben, ohne dass sich an deinem Körperfett irgendetwas geändert hat. Deshalb gilt: Wochendurchschnitt statt Tageswert, Verlauf statt Momentaufnahme. Ein schwerer Morgen ist kein Rückschritt, er ist Rauschen.'],
+      ['Protein konstant, Rest flexibel',
+       'die einfachste Ernährungsstruktur, die funktioniert: Protein und Fette bleiben weitgehend konstant, über die Kohlenhydrate wird gesteuert. Das macht Planung leicht, hält dich satt und gibt dir trotzdem Spielraum für echtes Essen mit Familie und Freundinnen. Ernährung muss in dein Leben passen, nicht umgekehrt.'],
+      ['Motivation ist wetterfühlig, Routine nicht',
+       'es wird Wochen geben, in denen die Motivation ganz unten ist. Das ist kein Zeichen, dass etwas falsch läuft, das ist normal. Der Unterschied zwischen denen, die ihre Form erreichen, und denen, die immer wieder von vorn anfangen: Erstere haben Routinen, die auch in schlechten Wochen funktionieren. Plane für dein schlechtestes Ich, nicht für dein bestes.'],
+      ['Mehr ist selten die Antwort',
+       'wenn der Fortschritt stockt, ist der Reflex fast immer: mehr Training, weniger Essen, mehr Cardio. Meistens ist das Gegenteil richtig, nämlich erst prüfen, ob Schlaf, Technik und Progression überhaupt stimmen. Ein Plan, der auf dem Papier härter aussieht, ist nicht automatisch der, der dich weiterbringt. Erst sauber, dann mehr.']
+    ];
+    for (var i = 0; i < seeds.length; i++) sh.appendRow([seeds[i][0], seeds[i][1], '']);
+  }
+  return sh;
 }
 
 /* ── Mail-Inhalte ────────────────────────────────────────────────── */
