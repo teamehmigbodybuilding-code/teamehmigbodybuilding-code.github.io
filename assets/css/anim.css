@@ -1,0 +1,116 @@
+/* Leonie Coaching v2 — Motion Layer (Editorial) */
+
+/* ---------- Scroll-Fortschritt ---------- */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; width: 100%;
+  background: var(--pink);
+  transform: scaleX(0); transform-origin: 0 50%;
+  z-index: 90; pointer-events: none;
+}
+
+/* ---------- Papier-Korn ---------- */
+.grain {
+  position: fixed; inset: -50%; z-index: 80; pointer-events: none; opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+/* Cursor-Glow entfällt im hellen Design — Element bleibt inert */
+.cursor-glow { display: none; }
+
+/* ---------- Split-Text: Zeilen-Reveal ---------- */
+.split-line { display: block; overflow: hidden; }
+.split-line > span {
+  display: block; transform: translateY(108%);
+  transition: transform 1s cubic-bezier(.16, .84, .3, 1);
+}
+.in .split-line > span, .split-line.in > span { transform: none; }
+.split-line:nth-child(2) > span { transition-delay: .08s; }
+.split-line:nth-child(3) > span { transition-delay: .16s; }
+.split-line:nth-child(4) > span { transition-delay: .24s; }
+.split-line:nth-child(5) > span { transition-delay: .32s; }
+
+/* Wort-für-Wort */
+.word { display: inline-block; opacity: 0; transform: translateY(16px); }
+.in .word { animation: wordIn .7s cubic-bezier(.16, .84, .3, 1) forwards; }
+@keyframes wordIn { to { opacity: 1; transform: none; } }
+
+/* ---------- Gestaffelte Reveals ---------- */
+[data-stagger] > * { opacity: 0; transform: translateY(24px); }
+[data-stagger].in > * { animation: upIn .75s cubic-bezier(.16, .84, .3, 1) forwards; }
+[data-stagger].in > *:nth-child(2) { animation-delay: .1s; }
+[data-stagger].in > *:nth-child(3) { animation-delay: .2s; }
+[data-stagger].in > *:nth-child(4) { animation-delay: .3s; }
+[data-stagger].in > *:nth-child(5) { animation-delay: .4s; }
+[data-stagger].in > *:nth-child(6) { animation-delay: .5s; }
+@keyframes upIn { to { opacity: 1; transform: none; } }
+
+/* ---------- Bild-Reveal: Vorhang in Papierfarbe + Zoom ---------- */
+.img-reveal { position: relative; overflow: hidden; }
+.img-reveal img { transform: scale(1.12); transition: transform 1.5s cubic-bezier(.16, .84, .3, 1); }
+.img-reveal.in img { transform: scale(1); }
+.img-reveal::before {
+  content: ''; position: absolute; inset: 0; z-index: 2; background: var(--paper-2);
+  transform-origin: 50% 100%; transition: transform 1s cubic-bezier(.7, 0, .2, 1);
+}
+.img-reveal.in::before { transform: scaleY(0); }
+.img-reveal .flash {
+  position: absolute; inset: 0; z-index: 3; background: var(--pink); pointer-events: none;
+  transform: scaleY(1); transform-origin: 50% 100%; opacity: 0;
+}
+.img-reveal.in .flash { animation: flashWipe 1.05s cubic-bezier(.7, 0, .2, 1) forwards; }
+@keyframes flashWipe {
+  0% { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 1; transform: scaleY(0); }
+}
+
+/* ---------- Parallax ---------- */
+[data-parallax] { will-change: transform; }
+
+/* ---------- Laufband ---------- */
+.marquee {
+  border-top: 2px solid var(--rule-dark); border-bottom: 2px solid var(--rule-dark);
+  background: var(--ink); overflow: hidden; padding: 16px 0;
+  --mq-speed: 30s;
+}
+.marquee-track { display: flex; width: max-content; animation: mq var(--mq-speed) linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee span {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 700; text-transform: uppercase;
+  font-size: clamp(26px, 4vw, 48px); letter-spacing: .04em;
+  padding: 0 30px; display: flex; align-items: center; gap: 30px;
+  color: var(--paper); white-space: nowrap;
+}
+.marquee span:nth-child(even) { color: transparent; -webkit-text-stroke: 1px var(--paper); }
+.marquee span::after { content: '✦'; font-size: 18px; color: var(--pink-bright); -webkit-text-stroke: 0; }
+@keyframes mq { to { transform: translateX(-50%); } }
+
+/* ---------- Zahlen-Counter ---------- */
+.counter { font-variant-numeric: tabular-nums; }
+
+/* ---------- Link-Unterstrich ---------- */
+.nav-links a:not(.btn) { position: relative; }
+.nav-links a:not(.btn)::after {
+  content: ''; position: absolute; left: 0; bottom: -5px; height: 2px; width: 100%;
+  background: var(--pink); transform: scaleX(0); transform-origin: 100% 50%;
+  transition: transform .35s cubic-bezier(.16, .84, .3, 1);
+}
+.nav-links a:not(.btn):hover::after { transform: scaleX(1); transform-origin: 0 50%; }
+
+/* ---------- Hero-Wortmarke: leichtes Ein-Schieben ---------- */
+.hero .eyebrow.reveal { transition-delay: .05s; }
+
+/* ---------- Schritt-Linie zeichnet sich ---------- */
+.step::after {
+  content: ''; position: absolute; left: 0; bottom: -1px; width: 0; height: 1px;
+  background: var(--pink); transition: width 1.1s cubic-bezier(.16, .84, .3, 1);
+}
+.step.in::after { width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .grain, .dot-live { animation: none !important; }
+  .marquee-track { animation: none; }
+  .split-line > span, .word, [data-stagger] > * { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .img-reveal img { transform: none; }
+  .img-reveal::before, .img-reveal .flash { display: none; }
+}

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coaching-Fragebogen — Leonie</title>
+<meta name="description" content="Der Coaching-Fragebogen: Ziel, Trainingsstand, Ernährung und Alltag. Ungefähr 10 Minuten — danach melde ich mich persönlich bei dir.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f7f4ef">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23141312'/><text x='16' y='23' font-size='20' font-family='sans-serif' font-weight='bold' fill='%23ff2f92' text-anchor='middle'>L</text></svg>">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/anim.css">
+<link rel="stylesheet" href="assets/css/form.css">
+</head>
+<body>
+
+<div class="progress-bar"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="index.html">Leonie<span>.</span></a>
+    <button class="nav-toggle" aria-label="Menü" aria-expanded="false">
+      <svg class="icon-burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <div class="nav-links">
+      <a href="index.html#angebot">Coaching</a>
+      <a href="index.html#ablauf">Ablauf</a>
+      <a href="index.html#faq">FAQ</a>
+      <a class="btn" href="index.html"><span>Zurück zur Seite</span></a>
+    </div>
+  </div>
+</nav>
+
+<main class="form-page">
+  <div class="wrap">
+    <div class="form-head">
+      <p class="eyebrow reveal">Bewerbung fürs Coaching</p>
+      <h1 data-split>Erzähl mir,<br>wo du gerade stehst</h1>
+      <p class="lead" data-words>Sechs kurze Schritte, ungefähr 10 Minuten. Je ehrlicher du antwortest, desto genauer kann ich dir sagen, ob und wie ich dir helfen kann. Deine Angaben bleiben zwischen uns.</p>
+    </div>
+
+    <div class="form-shell reveal">
+      <div class="steps-bar" aria-hidden="true">
+        <div class="dot"><i></i></div><div class="dot"><i></i></div><div class="dot"><i></i></div>
+        <div class="dot"><i></i></div><div class="dot"><i></i></div><div class="dot"><i></i></div>
+      </div>
+      <div class="step-meta">
+        <span id="stepLabel" aria-live="polite">Schritt 1 von 6 · Kontakt</span>
+        <span id="stepPct">0 %</span>
+      </div>
+
+      <form id="quiz" novalidate>
+        <!-- Spam-Falle -->
+        <div style="position:absolute;left:-9999px" aria-hidden="true">
+          <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <!-- 1 — Kontakt -->
+        <section class="fstep active" data-title="Kontakt">
+          <h2>Wer bist du?</h2>
+          <p class="hint">Damit ich dich erreichen kann.</p>
+          <div class="field-row">
+            <div class="field"><label for="vorname">Vorname</label><input id="vorname" name="Vorname" type="text" required autocomplete="given-name"><span class="error">Bitte trag deinen Vornamen ein.</span></div>
+            <div class="field"><label for="nachname">Nachname</label><input id="nachname" name="Nachname" type="text" required autocomplete="family-name"><span class="error">Bitte trag deinen Nachnamen ein.</span></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="email">E-Mail</label><input id="email" name="E-Mail" type="email" required autocomplete="email"><span class="error">Bitte eine gültige E-Mail-Adresse.</span></div>
+            <div class="field"><label for="handy">Handynummer <span class="opt">(für WhatsApp)</span></label><input id="handy" name="Handynummer" type="tel" autocomplete="tel"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="insta">Instagram <span class="opt">(optional)</span></label><input id="insta" name="Instagram" type="text" placeholder="@deinname"></div>
+            <div class="field"><label for="alter">Alter</label><input id="alter" name="Alter" type="number" min="14" max="99" required><span class="error">Bitte trag dein Alter ein.</span></div>
+          </div>
+        </section>
+
+        <!-- 2 — Ziel -->
+        <section class="fstep" data-title="Dein Ziel">
+          <h2>Was willst du erreichen?</h2>
+          <p class="hint">Wähl das, was am besten passt.</p>
+          <div class="field">
+            <label>Dein Hauptziel</label>
+            <div class="choices cols-2">
+              <label class="choice"><input type="radio" name="Ziel" value="Abnehmen / Formaufbau" required><span><b>Abnehmen &amp; Form aufbauen</b><small>Körperfett runter, Muskeln sichtbar</small></span></label>
+              <label class="choice"><input type="radio" name="Ziel" value="Muskelaufbau"><span><b>Muskelaufbau</b><small>Aufbauen, stärker werden</small></span></label>
+              <label class="choice"><input type="radio" name="Ziel" value="Wettkampf-Prep"><span><b>Wettkampf-Prep</b><small>Bikini oder Wellness, auf die Bühne</small></span></label>
+              <label class="choice"><input type="radio" name="Ziel" value="Einmaliger Plan"><span><b>Einmaliger Plan</b><small>Ohne laufende Betreuung</small></span></label>
+            </div>
+            <span class="error">Bitte wähl dein Ziel.</span>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="zieldatum">Gibt es einen Termin? <span class="opt">(Wettkampf, Urlaub, Shooting)</span></label><input id="zieldatum" name="Zieltermin" type="date"></div>
+            <div class="field"><label for="erfahrung">Trainingserfahrung</label>
+              <select id="erfahrung" name="Trainingserfahrung" required>
+                <option value="">bitte wählen</option>
+                <option>Ich fange gerade erst an</option>
+                <option>Unter 1 Jahr</option>
+                <option>1–3 Jahre</option>
+                <option>3–5 Jahre</option>
+                <option>Über 5 Jahre</option>
+              </select><span class="error">Bitte wähl eine Option.</span>
+            </div>
+          </div>
+          <div class="field"><label for="zielsatz">Beschreib dein Ziel in ein, zwei Sätzen</label><textarea id="zielsatz" name="Ziel in eigenen Worten" required placeholder="Was soll sich in den nächsten Monaten verändern — und woran würdest du merken, dass es geklappt hat?"></textarea><span class="error">Erzähl mir kurz, worum es dir geht.</span></div>
+        </section>
+
+        <!-- 3 — Aktueller Stand -->
+        <section class="fstep" data-title="Dein Stand">
+          <h2>Wo stehst du heute?</h2>
+          <p class="hint">Grobe Werte reichen völlig.</p>
+          <div class="field-row">
+            <div class="field"><label for="groesse">Größe (cm)</label><input id="groesse" name="Größe (cm)" type="number" min="120" max="220" required><span class="error">Bitte trag deine Größe ein.</span></div>
+            <div class="field"><label for="gewicht">Aktuelles Gewicht (kg)</label><input id="gewicht" name="Gewicht (kg)" type="number" min="30" max="200" step="0.1" required><span class="error">Bitte trag dein Gewicht ein.</span></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="tage">Trainingstage pro Woche</label>
+              <select id="tage" name="Trainingstage/Woche" required>
+                <option value="">bitte wählen</option>
+                <option>0 – ich starte neu</option><option>1–2</option><option>3</option><option>4</option><option>5</option><option>6–7</option>
+              </select><span class="error">Bitte wähl eine Option.</span>
+            </div>
+            <div class="field"><label for="gym">Wo trainierst du?</label>
+              <select id="gym" name="Trainingsort" required>
+                <option value="">bitte wählen</option>
+                <option>Vollausgestattetes Fitnessstudio</option>
+                <option>Kleines Studio / begrenzte Geräte</option>
+                <option>Zuhause mit Equipment</option>
+                <option>Zuhause ohne Equipment</option>
+              </select><span class="error">Bitte wähl eine Option.</span>
+            </div>
+          </div>
+          <div class="field"><label for="training">Wie sieht dein Training aktuell aus?</label><textarea id="training" name="Aktuelles Training" placeholder="Split, Übungen, wie lange schon, wie viel Cardio"></textarea></div>
+          <div class="field"><label for="essen">Wie isst du aktuell?</label><textarea id="essen" name="Aktuelle Ernährung" placeholder="Trackst du? Wie viele Kalorien / wie viel Protein? Wie sieht ein typischer Tag aus?"></textarea></div>
+          <div class="field-row">
+            <div class="field"><label for="schlaf">Schlaf pro Nacht</label>
+              <select id="schlaf" name="Schlaf">
+                <option value="">bitte wählen</option>
+                <option>unter 5 Stunden</option><option>5–6 Stunden</option><option>6–7 Stunden</option><option>7–8 Stunden</option><option>über 8 Stunden</option>
+              </select>
+            </div>
+            <div class="field"><label for="beruf">Beruf / Alltag <span class="opt">(sitzend, stehend, Schicht?)</span></label><input id="beruf" name="Beruf / Alltag" type="text"></div>
+          </div>
+        </section>
+
+        <!-- 4 — Gesundheit -->
+        <section class="fstep" data-title="Gesundheit">
+          <h2>Gibt es etwas, das ich wissen muss?</h2>
+          <p class="hint">Alles hier ist vertraulich — aber wichtig, damit dein Plan sicher ist.</p>
+          <div class="field"><label for="gesundheit">Verletzungen, Beschwerden oder Vorerkrankungen</label><textarea id="gesundheit" name="Gesundheit / Verletzungen" placeholder="z. B. Knie, Rücken, Schilddrüse, PCOS … oder einfach „nichts&quot;"></textarea></div>
+          <div class="field"><label for="zyklus">Zyklus &amp; Verhütung <span class="opt">(optional, hilft bei der Planung)</span></label><input id="zyklus" name="Zyklus" type="text" placeholder="regelmäßig / unregelmäßig / Pille / keine Angabe"></div>
+          <div class="field"><label for="supps">Medikamente &amp; Supplemente</label><textarea id="supps" name="Medikamente / Supplemente" placeholder="Was nimmst du aktuell regelmäßig?"></textarea></div>
+          <div class="field"><label for="historie">Diät-Historie <span class="opt">(optional)</span></label><textarea id="historie" name="Diät-Historie" placeholder="Was hast du schon probiert? Was hat funktioniert, was nicht?"></textarea></div>
+        </section>
+
+        <!-- 5 — Zusammenarbeit -->
+        <section class="fstep" data-title="Zusammenarbeit">
+          <h2>Wie stellst du dir die Betreuung vor?</h2>
+          <p class="hint">Damit ich dir das passende Paket vorschlagen kann.</p>
+          <div class="field">
+            <label>Wann willst du starten?</label>
+            <div class="choices cols-2">
+              <label class="choice"><input type="radio" name="Start" value="Sofort" required><span><b>Sofort</b><small>Ich bin bereit</small></span></label>
+              <label class="choice"><input type="radio" name="Start" value="In 2–4 Wochen"><span><b>In 2–4 Wochen</b><small>Ich plane voraus</small></span></label>
+              <label class="choice"><input type="radio" name="Start" value="Erstmal informieren"><span><b>Erstmal informieren</b><small>Ich schau mir das an</small></span></label>
+              <label class="choice"><input type="radio" name="Start" value="Nach dem Kennenlern-Call"><span><b>Nach dem Call</b><small>Erst reden, dann entscheiden</small></span></label>
+            </div>
+            <span class="error">Bitte wähl eine Option.</span>
+          </div>
+          <div class="field">
+            <label>Wie viel kannst und willst du monatlich investieren?</label>
+            <div class="choices cols-2">
+              <label class="choice"><input type="radio" name="Budget" value="bis 100 €"><span><b>bis 100 €</b></span></label>
+              <label class="choice"><input type="radio" name="Budget" value="100–150 €"><span><b>100–150 €</b></span></label>
+              <label class="choice"><input type="radio" name="Budget" value="150–250 €"><span><b>150–250 €</b></span></label>
+              <label class="choice"><input type="radio" name="Budget" value="Sag du mir, was passt"><span><b>Sag du mir, was passt</b></span></label>
+            </div>
+          </div>
+          <div class="field"><label for="warum">Warum jetzt?</label><textarea id="warum" name="Warum jetzt" required placeholder="Was ist der Auslöser, dass du dich genau heute meldest?"></textarea><span class="error">Bitte beantworte das kurz.</span></div>
+          <div class="field"><label for="gefunden">Wie hast du mich gefunden? <span class="opt">(optional)</span></label><input id="gefunden" name="Gefunden über" type="text" placeholder="Instagram, YouTube, Empfehlung …"></div>
+        </section>
+
+        <!-- 6 — Absenden -->
+        <section class="fstep" data-title="Absenden">
+          <h2>Passt das so?</h2>
+          <p class="hint">Kurz drüberschauen, dann geht's raus.</p>
+          <div class="summary"><dl id="summaryList"></dl></div>
+          <div class="field">
+            <label class="check">
+              <input type="checkbox" id="consent" name="Einwilligung" value="Ja" required>
+              <span>Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung meiner Coaching-Anfrage gespeichert und verarbeitet werden. Mehr dazu in der <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</span>
+            </label>
+            <span class="error">Ohne dein Einverständnis darf ich die Anfrage leider nicht bearbeiten.</span>
+          </div>
+          <p class="hint" id="sendError" style="color:#ff5f6d;display:none"></p>
+        </section>
+
+        <!-- Danke -->
+        <section class="fstep" data-title="Danke">
+          <div class="done-box">
+            <div class="done-mark"><svg viewBox="0 0 40 40"><path d="M9 21l7.5 7.5L31 12"/></svg></div>
+            <h2>Angekommen!</h2>
+            <p class="lead" style="margin:14px auto 26px">Danke, dass du dir die Zeit genommen hast. Ich lese jede Anfrage selbst — du hörst innerhalb von 48 Stunden von mir.</p>
+            <a class="btn" href="index.html"><span>Zurück zur Startseite</span></a>
+          </div>
+        </section>
+
+        <div class="form-nav" id="formNav">
+          <button type="button" class="btn" id="backBtn" disabled><span>← Zurück</span></button>
+          <button type="button" class="btn btn-primary" id="nextBtn"><span>Weiter →</span></button>
+        </div>
+      </form>
+      <p class="saved-note" id="savedNote">Deine Eingaben werden automatisch in diesem Browser gespeichert — du kannst jederzeit pausieren.</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-inner">
+      <a class="logo" href="index.html">Leonie<span>.</span></a>
+      <div class="foot-links">
+        <a href="index.html">Startseite</a>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/form.js"></script>
+</body>
+</html>
