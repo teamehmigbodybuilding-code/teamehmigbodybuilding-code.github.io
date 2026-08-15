@@ -13,7 +13,7 @@ window.LEONIE_CONFIG = {
   /* Newsletter-Endpoint (backend/newsletter.gs als Web-App bereitstellen und
      die /exec-URL hier eintragen). Solange hier "" steht, ist das
      Newsletter-Formular auf der Startseite unsichtbar. */
-  newsletterEndpoint: '',
+  newsletterEndpoint: 'https://script.google.com/macros/s/AKfycby30f5yMSM2IcNx-_mxNfkRVo75AlMnZFL6La0LD9iWAkdYHVjwTCfN5JrcFxCXtVZY7w/exec',
 
   /* Speicherschlüssel für den Zwischenstand im Browser */
   storageKey: 'leonie-coaching-fragebogen'
