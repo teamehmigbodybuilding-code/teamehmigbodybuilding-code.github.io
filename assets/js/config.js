@@ -10,6 +10,11 @@ window.LEONIE_CONFIG = {
   /* Fallback-Adresse: Hier landen die Anfragen, solange kein Endpoint gesetzt ist. */
   email: 'team.ehmig.bodybuilding@gmail.com',
 
+  /* Newsletter-Endpoint (backend/newsletter.gs als Web-App bereitstellen und
+     die /exec-URL hier eintragen). Solange hier "" steht, ist das
+     Newsletter-Formular auf der Startseite unsichtbar. */
+  newsletterEndpoint: '',
+
   /* Speicherschlüssel für den Zwischenstand im Browser */
   storageKey: 'leonie-coaching-fragebogen'
 };

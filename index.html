@@ -95,7 +95,7 @@
     <div class="ed-list">
       <div class="ed-item reveal">
         <span class="ed-num">01</span>
-        <h3>Du trainierst — aber es passiert nichts</h3>
+        <h3>Du trainierst, aber es passiert nichts</h3>
         <p>Du bist regelmäßig im Gym, gibst alles und trotzdem verändert sich seit Monaten nichts. Meistens fehlt kein Fleiß, sondern Struktur: Volumen, Progression und Essen passen nicht zusammen.</p>
       </div>
       <div class="ed-item reveal">
@@ -172,7 +172,7 @@
         <p class="price">Training oder Ernährung · 89 € einmalig</p>
         <ul>
           <li>Ein individueller Plan, erstellt aus deinem Fragebogen</li>
-          <li>Erklärung, warum er so aussieht — inklusive Progression</li>
+          <li>Erklärung, warum er so aussieht, inklusive Progression</li>
           <li>Eine Feedback-Runde nach vier Wochen</li>
           <li>Ohne laufende Betreuung, jederzeit upgradebar</li>
         </ul>
@@ -358,6 +358,24 @@
   </div>
 </section>
 
+<section id="newsletter" style="display:none;background:var(--paper-2)">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">Newsletter</p>
+        <h2 data-split>Ein Impuls pro Woche,<br>direkt von mir</h2>
+      </div>
+    </div>
+    <p class="lead reveal" style="margin:26px 0 28px;max-width:560px">Einmal pro Woche ein kurzer Trainings- oder Ernährungs-Impuls und der aktuelle Stand meiner freien Coaching-Plätze. Kein Spam, Abmeldung mit einem Klick.</p>
+    <form id="nlForm" class="reveal" style="display:flex;gap:12px;flex-wrap:wrap;max-width:560px">
+      <input type="email" id="nlEmail" required placeholder="deine@email.de" autocomplete="email"
+        style="flex:1;min-width:220px;padding:14px 16px;font:inherit;color:inherit;background:transparent;border:1px solid currentColor;border-radius:0">
+      <button class="btn btn-primary" type="submit"><span>Eintragen →</span></button>
+    </form>
+    <p class="foot-note" id="nlNote" style="margin-top:12px">Nach dem Eintragen bekommst du eine Bestätigungs-Mail (Double-Opt-in). Details in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+  </div>
+</section>
+
 <section class="cta" style="padding-top:0">
   <div class="wrap">
     <div class="cta-box reveal">
@@ -389,6 +407,44 @@
   <a class="btn btn-primary" href="fragebogen.html"><span>Jetzt Platz anfragen →</span></a>
 </div>
 
+<script src="assets/js/config.js"></script>
 <script src="assets/js/main.js"></script>
+<script>
+(function () {
+  var cfg = window.LEONIE_CONFIG || {};
+  if (!cfg.newsletterEndpoint) return;
+  var sec = document.getElementById('newsletter');
+  var form = document.getElementById('nlForm');
+  var note = document.getElementById('nlNote');
+  if (!sec || !form) return;
+  sec.style.display = '';
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var email = document.getElementById('nlEmail').value.trim();
+    if (!email) return;
+    var btn = form.querySelector('button');
+    btn.disabled = true;
+    fetch(cfg.newsletterEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'subscribe', 'E-Mail': email })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (res.ok) {
+          form.reset();
+          note.textContent = 'Fast geschafft: Schau in dein Postfach und bestätige deine Anmeldung.';
+        } else {
+          note.textContent = 'Das hat nicht geklappt. Prüf die Adresse und versuch es noch einmal.';
+        }
+        btn.disabled = false;
+      })
+      .catch(function () {
+        note.textContent = 'Das hat gerade nicht geklappt. Versuch es später noch einmal.';
+        btn.disabled = false;
+      });
+  });
+})();
+</script>
 </body>
 </html>
